@@ -1,0 +1,77 @@
+---
+title: Setup
+description: 'How to setup Roobot.'
+---
+<Note>
+  Windows users MUST pre-install [vc_redist.x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe)
+</Note>
+
+## Download the latest build from discord.
+1. Once you have purchased a subscription, You will be able to access the `updates` channel.
+2. Here you can find new versions of Roobot.
+3. Choose your operating system, Either Windows or Linux. We currently do not support Mac.
+4. Download the Binary, If you are on Windows you may have to disable `Real Time Protection`. If you are on linux, You can easily download by using `wget`
+
+## Inital Setup
+
+- Run the binary, If you do not already have a config file, It will create one.
+- Configure the `config.toml`, Refer to [Configuration](https://docs.roobot.lol/basics/configuration)
+
+## Usage
+
+Linux Video Guide: [Setup Roobot on Ubuntu](https://youtu.be/lp5dJFBY0ng)
+
+1. Roobot will instantly attempt to start when ran, According to your config.
+2. Make sure you are properly configuring your config for the best results:
+
+- if it’s an **opentime** pool: **you need ammid**
+- if it’s a **stealth** drop, you **don’t need ammid**
+- if it’s an existing pool ( bonk for example ) you don’t need ammid
+
+<Note>
+Roobot will always look for liquidity injection tx, or go based off opentime timer.
+</Note>
+
+Roobot & wSOL
+- Roobot will always attempt to prewrap your `SOL > wSOL` before starting tasks.
+- If you already have enough `wSOL` it will **not** attempt to wrap
+- Your uPNL inside the sell module will be inaccurate if you have more wSOL than needed
+
+**Best practice is to not prewrap your SOL manually, Let Roobot do all the work.**
+
+Here is an example `config.toml` that has given me the best results for opentime:
+
+```toml config.toml
+[core]
+license_key  = "ROO-XXXX-XXXX-XXXX"
+private_key = "privatekey"
+rpc_url = "http://roobot.lol"
+send_tx_rpc_urls = ["http://roobot.lol"]
+wss_url = "ws://roobot.lol"
+
+[inputs]
+input_token = "So11111111111111111111111111111111111111112"
+output_token = "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm"
+input_amount = 0.0001
+priority_fee_sol = 0.00001
+txs_to_send = 1250
+resend_interval_ms = 100
+send_delay_ms = 2
+pre_create_token_account = true
+
+[raydium]
+abort_on_open_time = false
+send_before_open_time_ms = 1250
+amm_id = "w4Wc7nmjoXXX8DACreStkmK6trqjFo2NkkS4hgBf2nZ"
+
+[sell]
+priority_fee_sol = 0.001
+refresh_pnl_delay_ms = 30
+wait_for_sell_confirmation = false
+
+[jito]
+auth_keypair = "jito-auth-private-key"
+block_engine_url = "https://ny.mainnet.block-engine.jito.wtf"
+buy_tip_sol = 0.1
+sell_tip_sol = 0.1
+```

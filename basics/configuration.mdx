@@ -1,0 +1,111 @@
+---
+title: Configuration
+description: 'Setting up your instance.'
+---
+
+By default, your `config.toml` file will look like this:
+
+```toml config.toml
+[core]
+license_key  = "ROO-XXXX-XXXX-XXXX" # Roobot License Key
+private_key = "privatekey" # Private key of your wallet
+rpc_url = "http://example.com" # HTTP RPC URL
+send_tx_rpc_urls = ["http://example.com"] # RPC URLs to send txs to
+wss_url = "ws://example.com" # Websocket URL
+
+[inputs]
+input_token = "So11111111111111111111111111111111111111112" # The token you want to spend ( wSOL address )
+output_token = "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm" # The token you want to buy ( WIF address )
+input_amount = 0.0001 # The amount of input_token you want to spend
+priority_fee_sol = 0.001 # Amount of extra SOL to pay in fees
+txs_to_send = 625 # Amount of transactions to send
+resend_interval_ms = 100 # How often to resend already generated txs
+send_delay_ms = 2 # Delay between each transaction sent transactions
+pre_create_token_account = true # Disables creating output token account in the setup when false
+
+# Raydium specific configuration
+[raydium]
+abort_on_open_time = false # Set this to true if you want not to proceed if there is a pool open time in the future
+send_before_open_time_ms = 1250 # How many milliseconds before open time to start sending transactions
+amm_id = "w4Wc7nmjoXXX8DACreStkmK6trqjFo2NkkS4hgBf2nZ" # Pool ID
+
+# Selling configuration
+[sell]
+priority_fee_sol = 0.001 # Priority fee
+refresh_pnl_delay_ms = 30 # How many seconds to wait between PnL refreshes
+wait_for_sell_confirmation = true # If true, It will await to confirm the sell transactions
+
+# Jito usage is optional, learn about jito https://jito-labs.gitbook.io/mev/searcher-resources
+[jito]
+auth_keypair = "private-key-here" # jito auth keypair, for the wallet whitelisted by Jito. base58 or array
+block_engine_url = "https://ny.mainnet.block-engine.jito.wtf" # Prefer a location close to your bot frankfurt, ny, amsterdam, tokyo
+buy_tip_sol = 0.1
+sell_tip_sol = 0.1
+```
+
+<Note>
+  IF YOU ARE NOT USING A FIELD, E.G `amm_id` - YOU NEED TO REMOVE THE ENTIRE LINE / COMMENT IT OUT USING A #. SAME FOR JITO SECTION
+</Note>
+
+### Core Configuration
+
+> `license_key` Your license key, Can be fetched from your [Whop Dashboard](https://whop.com/orders/products/).
+
+> `private_key` The private key of the Solana wallet you would like to use.
+
+> `rpc_url` The HTTP URL of your RPC.
+
+> `send_tx_rpc_urls` RPC URLs to send txs to
+
+> `wss_url` The websocket URL of your RPC.
+
+### Inputs Configuration
+
+> `input_token` The token address of the token you wish to spend.
+>
+> *wSOL: `So11111111111111111111111111111111111111112`* \
+> *USDC: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`*
+
+> `output_token` The token address of the token you wish to snipe.
+
+> `input_amount` The amount of `input_token` you would like to spend per TX sent.
+
+> `priority_fee_sol` The priority fee amount you would like to pay in SOL. [More](https://docs.solana.com/transaction_fees)
+
+> `txs_to_send` The amount of transactions you would like to send.
+
+> `resend_interval_ms` How often to resend already generated txs.
+
+> `send_delay_ms` Delay between each transaction sent.
+
+> `pre_create_token_account` Disables creating output token account in the setup when false, as a result a single transaction can succeed, This is best if left as `true`
+
+
+### Raydium Configuration
+
+> `abort_on_open_time` Set this to `false` if you do **not** want to run opentime pools
+
+> `send_before_open_time_ms` How many milliseconds before open time to start sending transactions
+
+> `amm_id` Pool ID. Must be set if you are running an already existing pool with a timer.
+
+### Selling Configuration
+> `priority_fee_sol` The priority fee to use when sending sell transactions
+
+> `refresh_pnl_delay_ms` How millisecondsonds to wait between PnL refreshes
+
+> `wait_for_sell_confirmation` Waits to confirm the sell transaction, can hang if enabled.
+
+### Jito Configuration
+
+<Note>
+  Read: https://jito-labs.gitbook.io/mev/searcher-resources
+</Note>
+
+> `auth_keypair` The private key of the Jito Auth Keypair
+
+> `block_engine_url` Prefer a location close to your bot frankfurt, ny, amsterdam, tokyo
+
+> `buy_tip_sol` Bribe amount in SOL
+
+> `sell_tip_sol` Bribe amount in SOL for SELLING
